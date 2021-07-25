@@ -140,6 +140,8 @@ export default function AddTrainee(props) {
                employeeName: props.edit ? location.state.data.employeeName : '',
                personal:  props.edit ? location.state.data.personal : '',
                phone: props.edit ? location.state.data.phone : '',
+               periodOfInternship: props.periodOfInternship ? location.state.data.periodOfInternship : '',
+               durationOfInternship: props.durationOfInternship ? location.state.data.durationOfInternship : '',
                }}
                validationSchema={
                    
@@ -165,8 +167,8 @@ export default function AddTrainee(props) {
                    level:Yup.string().max(255).required('Level is required'),
                    phone:Yup.string().matches(phoneRegExp, 'Mobile number is not valid').min(9).required('Mobile number is required'),
                    employeeName: Yup.string().max(255).required('Employee Name is required'),
-                //    supervisor: Yup.string().max(255).required('Supervisor is required'),
-                //    suggestedBy: Yup.string().max(255).required('Suggested By is required'),
+                   periodOfInternship: Yup.string().max(255).required('Period is required'),
+                   durationOfInternship: Yup.string().max(255).required('Duration is required'),
                    
                })
             
@@ -474,6 +476,40 @@ export default function AddTrainee(props) {
                                 onChange={handleChange}
                                 type="text"
                                 value={values.employeeName}
+                                variant="outlined"
+                                required
+                            />
+                        </Grid>
+                    </Grid>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                error={Boolean(touched.periodOfInternship && errors.periodOfInternship)}
+                                helperText={touched.periodOfInternship && errors.periodOfInternship}
+                                fullWidth
+                                label="period Of Internship "
+                                margin="normal"
+                                name="periodOfInternship"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                type="text"
+                                value={values.periodOfInternship}
+                                variant="outlined"
+                                required
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                error={Boolean(touched.durationOfInternship && errors.durationOfInternship)}
+                                helperText={touched.durationOfInternship && errors.durationOfInternship}
+                                fullWidth
+                                label="Duration Of Internship"
+                                margin="normal"
+                                name="durationOfInternship"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                type="text"
+                                value={values.durationOfInternship}
                                 variant="outlined"
                                 required
                             />
