@@ -97,14 +97,7 @@ export default function AddTrainee(props) {
 
         setFiles(item);
         console.log(files);
-        // const updatedValues = values.map((value, i) => {
-        //   if (i === index) {
-        //     return e.target.value;
-        //   } else {
-        //     return value;
-        //   }
-        // });
-        // setValues(updatedValues);
+     
       };
 
     const phoneRegExp = /^(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)?$/;
@@ -196,10 +189,23 @@ export default function AddTrainee(props) {
 
                         //    history.push({pathname:'/addcard',state:{ data:true }});
                        }).catch(function (error){
-                        setLoading(false);
-                        setAlert(true)
-                        setAlertMessage("Trainees Limit Excided")
-                        setSeverity('error')
+                        if (error.response) {
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                          }
+                          if(error.response.status===500){
+                            setLoading(false);
+                            setAlert(true)
+                            setAlertMessage("Some thing went wrong, Please try again")
+                            setSeverity('error')
+                          }else{
+                            setLoading(false);
+                            setAlert(true)
+                            setAlertMessage(error.response.data)
+                            setSeverity('error')
+                          }
+                        
                       })
                    
                    

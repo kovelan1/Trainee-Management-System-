@@ -7,7 +7,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-
+import DoneIcon from '@material-ui/icons/Done';
 import Divider from '@material-ui/core/Divider';
 import GetAppIcon from '@material-ui/icons/GetApp';
 import Button from '@material-ui/core/Button';
@@ -173,7 +173,7 @@ const useStyles = makeStyles((theme) => ({
     };
 
     handleDeleteClose = () => {
-        this.setState({ open: false });
+        this.setState({ deleteopen: false });
     };
 
     handleeditClose=() =>{
@@ -284,6 +284,12 @@ const useStyles = makeStyles((theme) => ({
                                         {localStorageService.getItem('role') ==='ROLE_director' && <TableCell align="left">{trainee.directorConfirmed ? "Yes" : "No"}</TableCell>}
                                        
                                         <TableCell align="right">
+                                        {localStorageService.getItem('role') ==='ROLE_admin' && !trainee.directorConfirmed  && 
+                                            <IconButton edge="start" color="primary" onClick={e=>this.handleEditOpen(trainee.id)} aria-label="menu">
+                                                <DoneIcon/>
+                                            </IconButton>
+                                            
+                                            }
                                             
                                             {(localStorageService.getItem('role') ==='ROLE_secretary' || localStorageService.getItem('role') ==='ROLE_admin')  && <>
                                             
@@ -301,12 +307,7 @@ const useStyles = makeStyles((theme) => ({
                                             </IconButton>
                                             
                                             }
-                                            {localStorageService.getItem('role') ==='ROLE_director' && !trainee.directorConfirmed  && 
-                                            <IconButton edge="start" color="primary" onClick={e=>this.handleEditOpen(trainee.id)} aria-label="menu">
-                                                <EditIcon />
-                                            </IconButton>
-                                            
-                                            }
+                                           
                                             <IconButton edge="start" onClick={e=>this.handleClickOpen(trainee, trainee.files)} color="inherit" aria-label="menu">
                                                 <VisibilityIcon />
                                             </IconButton>

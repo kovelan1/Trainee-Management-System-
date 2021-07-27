@@ -2,6 +2,7 @@ package com.tms.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
 import javax.persistence.EntityManager;
@@ -81,20 +82,25 @@ public class TraineeService {
 	}
 
 	@Transactional
-	public ResponseEntity<?> createTrainee(Trainee trainee) {
+	public ResponseEntity<?> createTrainee(Trainee trainee){
 		Supervisor supervisor= supervisorRepository.findById(trainee.getSupervisor().getId()).orElseThrow();
-		List<Trainee> trainees=supervisor.getTrinees();
+		List<Trainee> trainees=supervisor.getTrinees().stream().filter(t-> t.isDeleted() == false).collect(Collectors.toList());
+		
 		if(trainees.size()>= supervisor.getTraineesCount()) {
-			return new ResponseEntity<String>("Trainees limit over",HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<String>("Trainees Limit Excided",HttpStatus.BAD_REQUEST);
 		}
 		Trainee createdTrainee =traineeRepository.save(trainee);
 		
+		
 		try {
 			sendEmail(trainee.getFirstname() +" "+trainee.getLastname(), trainee.getSupervisor().getUser().getUsername());
-		} catch (MessagingException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (MessagingException e) {
+			return new ResponseEntity<String> ("Error occoured while sending the email",HttpStatus.BAD_REQUEST);
+			
+		} catch (IOException e) {
+			return new ResponseEntity<String> ("Error occoured while sending the email",HttpStatus.BAD_REQUEST);
 		}
+		
 		return new ResponseEntity<Trainee>(trainee,HttpStatus.OK);
 	}
 

@@ -41,7 +41,7 @@ public class TraineeManagementBackendApplication {
     public void initData() {
         List<User> users = Stream.of(
                 new User("admin@gmail.com", passwordEncoder.encode("admin"),"sam","bill","ROLE_admin",true ),
-                new User("d@gmail.com", passwordEncoder.encode("dd"),"john","deo","ROLE_director",true ),
+               
                 new User("hr@gmail.com", passwordEncoder.encode("hr"),"hr","deo","ROLE_hr",true )
         ).collect(Collectors.toList());
         userRepository.saveAll(users);

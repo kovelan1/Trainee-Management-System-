@@ -9,6 +9,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -16,6 +22,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "users" )
+@SQLDelete(sql = "UPDATE users SET deleted = true WHERE username=?")
+@FilterDef(name = "deletedUserFilter", parameters = @ParamDef(name = "isDeleted", type = "boolean"))
+@Filter(name = "deletedUserFilter", condition = "deleted = :isDeleted")
 public class User {
 
     @Id
@@ -29,15 +38,25 @@ public class User {
     private String lastName;
     private String role;
     private boolean enabled;
+    private boolean deleted=Boolean.FALSE;
     
-    @JsonIgnore
+    public boolean isDeleted() {
+		return deleted;
+	}
+
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
+	@JsonIgnore
     @OneToOne(mappedBy = "user")
     private Supervisor supervisor;
     
 	//    @JsonIgnore
 //    @OneToMany(mappedBy = "supervisor")
 //    private List<Trainee> trinees;
-    
+
     @JsonIgnore
     @OneToMany(mappedBy = "suggestedBy")
     private List<Trainee> suggested;

@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityManager;
+
+import org.hibernate.Filter;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import com.tms.exceprtion.UserExcistException;
 import com.tms.model.Supervisor;
+import com.tms.model.Trainee;
 import com.tms.model.User;
 import com.tms.model.UserDTO;
 import com.tms.repository.SupervisorRepository;
@@ -29,6 +34,8 @@ public class UserService {
 	@Autowired 
 	private SupervisorRepository supervisorRepository;
 	
+	@Autowired
+    private EntityManager entityManager;
 	
 
 	
@@ -72,26 +79,48 @@ public class UserService {
 	
 
 	public List<Supervisor> getAllSupervisor() {
+		Session session = entityManager.unwrap(Session.class);
+	    Filter filter = session.enableFilter("deletedUserFilter");
+	    filter.setParameter("isDeleted", false);
+//	    supervisor.getTrinees().stream().filter(t-> t.isDeleted() == false).collect(Collectors.toList());
+	    List<Supervisor> supervisors = supervisorRepository.findAll().stream().filter(t-> t.getUser().isDeleted() == false).collect(Collectors.toList());
+	    session.disableFilter("deletedTraineeFilter");
 		
-		return supervisorRepository.findAll();
+		return supervisors;
 	}
 
 
 	public List<User> getAllSuggestedBy() {
-		
-		return userRepository.findAll();
+		Session session = entityManager.unwrap(Session.class);
+	    Filter filter = session.enableFilter("deletedUserFilter");
+	    filter.setParameter("isDeleted", false);
+	    List<User> user = userRepository.findAll();
+	    session.disableFilter("deletedTraineeFilter");
+	    
+		return user;
 	}
 
 
 	public List<User> getAllUserByRole(String role) {
 		
-		return userRepository.findByRole(role);
+		Session session = entityManager.unwrap(Session.class);
+	    Filter filter = session.enableFilter("deletedUserFilter");
+	    filter.setParameter("isDeleted", false);
+	    List<User> user = userRepository.findByRole(role);
+	    session.disableFilter("deletedTraineeFilter");
+	    
+		return user;
 	}
 
 
 	public Supervisor getSupervisorByPrinc(String name) {
 		System.out.println(name);
-		User user=userRepository.getById(name);
+		Session session = entityManager.unwrap(Session.class);
+	    Filter filter = session.enableFilter("deletedUserFilter");
+	    filter.setParameter("isDeleted", false);
+	    User user = userRepository.getById(name);
+	    
+//		User user=userRepository.getById(name);
 //		 user.getSupervisor();
 //		Supervisor getsupervisor=new Supervisor();
 		
@@ -102,6 +131,7 @@ public class UserService {
 				idLong= supervisor.getId();
 			}
 		});
+		session.disableFilter("deletedTraineeFilter");
 		return supervisorRepository.findById(idLong).orElseThrow();
 	}
 
@@ -112,6 +142,22 @@ public class UserService {
 		return supervisorRepository.save(supervisor);
 	}
 
+
+	public void deleteUser(String username) {
+//		User user= userRepository.findByUsername(username);
+//		if(user.getRole().equals("ROLE_supervisor")) {
+//			supervisorRepository.deleteById(user.getSupervisor().getId());
+//		}
+
+		userRepository.deleteById(username);
+		
+	}
+
+	public void deleteSupervisor(String username,long id) {
+		supervisorRepository.deleteById(id);
+		userRepository.deleteById(username);
+		
+	}
 	
 
 }

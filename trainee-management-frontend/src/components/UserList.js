@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { getUsers, getUserForRole } from '../services/ApiService'
+import { deleteSupervisor, deleteUser, getUserForRole } from '../services/ApiService'
 import { Link as RouterLink,withRouter, Redirect } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
@@ -57,7 +57,7 @@ const useStyles = makeStyles((theme) => ({
         users: '',
         open: false,
         deleteopen:false,
-        deleteId:null,
+        deletingUser:null,
         
 
     }
@@ -72,6 +72,8 @@ const useStyles = makeStyles((theme) => ({
                 return 'Supervisor';
             case 'ROLE_secretary':
                 return 'Secretary';
+            case 'ROLE_director':
+                return 'Director';
             default:
               return '';
           }
@@ -90,21 +92,26 @@ const useStyles = makeStyles((theme) => ({
         console.log(this.state.users)
     }
     
-    // handelAgree =() =>{
-    //     deleteTrainee(this.state.deleteId).then(data=>{}).catch();
-    //     let temp= this.state.users.filter(item => item.id !== this.state.deleteId);
-    //     this.setState({users:temp})
-    //     this.setState({ deleteopen: false });
-    // }            
+    handelAgree =() =>{
+        
+            deleteUser(this.state.deletingUser.username).then(data=>{}).catch();
+        
+        
+        let temp= this.state.users.filter(item => item.username !== this.state.deletingUser.username);
+        this.setState({users:temp})
+        this.setState({ deleteopen: false });
+        // this.componentDidMount()
+    }            
 
-    // handleDeleteOpen = (id) => {
-    //     this.setState({deleteId:id})
-    //     this.setState({ deleteopen: true });
-    // };
+    handleDeleteOpen = (user) => {
+        
+        this.setState({deletingUser:user})
+        this.setState({ deleteopen: true });
+    };
 
-    // handleDeleteClose = () => {
-    //     this.setState({ open: false });
-    // };
+    handleDeleteClose = () => {
+        this.setState({ deleteopen: false });
+    };
      
   
 
@@ -150,10 +157,11 @@ const useStyles = makeStyles((theme) => ({
                                         <TableCell align="left">{user.username}</TableCell>
                                         <TableCell align="left">{this.userRole(user.role)}</TableCell>
                                         <TableCell align="right">
-{/*                                             
-                                            <IconButton edge="start" color="secondary" onClick={e=>this.handleDeleteOpen(user.id)} aria-label="menu">
+                                            { user.role!=="ROLE_admin" &&
+                                            <IconButton edge="start" color="secondary" onClick={e=>this.handleDeleteOpen(user)} aria-label="menu">
                                                 <DeleteIcon />
-                                            </IconButton> */}
+                                            </IconButton>
+    }
                                         </TableCell>
 
                                     </TableRow>
@@ -193,150 +201,3 @@ const useStyles = makeStyles((theme) => ({
     }
 }
 export default withRouter(UserList);
-
-
-// function modelConteant(trainee){
-
-
-//     console.log(trainee)
-//     return(
-//         <div >
-//            <table>
-//                <tbody style={{textAlign:'left'}}>
-//                <tr>
-//                    <th >Frist Name</th><th> : </th><th>{trainee.firstname}</th>
-//                </tr>
-//                <tr>
-//                    <th >Last Name </th><th> : </th><th>{trainee.lastname}</th>
-//                </tr>
-//                <tr>
-//                    <th >CIN </th><th> : </th><th>{trainee.cin}</th>
-//                </tr>
-//                <tr>
-//                    <th >Personal</th><th> : </th><th>{trainee.personal}</th>
-//                </tr>
-//                <tr>
-//                    <th >Address</th><th> : </th><th>{trainee.address.homeNumber} {trainee.address.address}, {trainee.address.city},{trainee.address.state}</th>
-//                </tr> 
-//                <tr>
-//                    <th >Phone</th><th> : </th><th>{trainee.phone}</th>
-//                </tr>
-//                <tr>
-//                    <th >Email</th><th> : </th><th>{trainee.email}</th>
-//                </tr>
-//                <tr>
-//                    <th >Establishment</th><th> : </th><th>{trainee.establishment}</th>
-//                </tr>
-//                <tr>
-//                    <th >Specialty</th><th> : </th><th>{trainee.specialty}</th>
-//                </tr>
-//                <tr>
-//                    <th >Level</th><th> : </th><th>{trainee.level}</th>
-//                </tr>
-//                <tr>
-//                    <th >Period Of Internship</th><th> : </th><th>{trainee.periodOfInternship}</th>
-//                </tr>
-//                <tr>
-//                    <th >Duration Of Internship</th><th> : </th><th>{trainee.durationOfInternship}</th>
-//                </tr>
-//                <tr>
-//                    <th >Employee Name</th><th> : </th><th>{trainee.employeeName}</th>
-//                </tr>
-//                <tr>
-//                    <th >Supervisor</th><th> : </th><th>{trainee.supervisor.user.firstName} {trainee.supervisor.user.lastName}</th>
-//                </tr>
-//                <tr>
-//                    <th >SuggestedBy</th><th> : </th><th>{trainee.suggestedBy.firstName} {trainee.suggestedBy.lastName}</th>
-//                </tr>
-//                <tr>
-//                    <th >HR Validated</th><th> : </th><th>{trainee.hrValidated ? "Yes" : "No"}</th>
-//                </tr>
-//                <tr>
-//                    <th >Director Confirmed</th><th> : </th><th>{trainee.directorConfirmed ? "Yes" : "No"}</th>
-//                </tr>
-//                 {
-//                     trainee.files.map(file=>(
-//                         file.fileType !== null ?
-//                         <tr>
-//                             <th >{file.category}</th><th> : </th>
-//                             <th>
-//                             <Button
-//                                 style={{textTransform: 'none'}}
-//                                 variant="contained"
-//                                 color="primary"
-//                                 startIcon={<GetAppIcon />}
-//                                 onClick={() => {handleDownload(file.id,file.fileName)}}
-//                             >
-//                                 {file.fileName}
-//                             </Button>
-                            
-                                
-//                             </th>
-//                         </tr>
-//                         :''
-//                     ))
-//                 }
-
-//                </tbody>
-               
-//            </table>
-          
-//             {/* <List>
-//                 <ListItem >
-//                     <ListItemText align="right" primary="First Name :" />
-//                     <ListItemText  primary={trainee.firstname} />
-//                 </ListItem>
-                    
-//                 <ListItem button>
-//                     <ListItemText primary="Last Name" />
-//                     <ListItemText primary={trainee.lastname} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="CIN" />
-//                     <ListItemText primary={trainee.cin} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText align="left" primary={<Typography style={{textAlign:"left"}}>{trainee.personal} </Typography>}/>
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Address" />
-//                     <ListItemText align="left" primary={<Typography style={{textAlign:"left"}}> {trainee.address.homeNumber+" "+ trainee.address.address+", "+trainee.address.city+", "+ trainee.address.state }</Typography>} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-//                 <ListItem button>
-//                     <ListItemText primary="Personal" />
-//                     <ListItemText primary={trainee.personal} />
-//                 </ListItem>
-                
-//             </List> */}
-//         </div>
-//     )
-// }

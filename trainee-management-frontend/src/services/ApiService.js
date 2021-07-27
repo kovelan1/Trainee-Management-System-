@@ -5,13 +5,12 @@ import fileDownload from 'js-file-download'
 // import qs from 'qs';
 const baseUrl = 'http://localhost:8080';
 
-const userName=localStorageService.getItem("username");
-const password=localStorageService.getItem("password");
-const role=localStorageService.getItem("role");
+
 
 
 
 export const getAuthonticated = async (user, password) => {
+ 
     let res = await axios({
         method: 'get',
         url: baseUrl + "/me",
@@ -20,10 +19,15 @@ export const getAuthonticated = async (user, password) => {
             password: password
         }
     })
+    
     return res
 }
 
 export const handleDownload = (id,filename) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
+
     axios.get(baseUrl + `/downloadFile/${id}`, {
       responseType: 'blob',
       auth: {
@@ -37,6 +41,9 @@ export const handleDownload = (id,filename) => {
 }
 
 export const getTrainees = async () => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'get',
         url: baseUrl + "/trainees",
@@ -49,6 +56,9 @@ export const getTrainees = async () => {
 }
 
 export const approveTrainee = async (id) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'put',
         url: baseUrl + `/trainee/${role}/${id}`,
@@ -62,6 +72,9 @@ export const approveTrainee = async (id) => {
 
 
 export const getArchiveTrainees = async () => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'get',
         url: baseUrl + "/trainees?isDeleted=true",
@@ -74,6 +87,9 @@ export const getArchiveTrainees = async () => {
 }
 
 export const getSupervisor = async () => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'get',
         url: baseUrl + "/supervisor",
@@ -86,6 +102,9 @@ export const getSupervisor = async () => {
 }
 
 export const getSuggestedBy = async () => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'get',
         url: baseUrl + "/suggestedBy",
@@ -98,6 +117,9 @@ export const getSuggestedBy = async () => {
 }
 
 export const signup = async (data) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'POST',
         url: baseUrl + "/signup",
@@ -107,6 +129,9 @@ export const signup = async (data) => {
 }
 
 export const addingTrainee = async (data) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'POST',
         url: baseUrl + "/trainee",
@@ -120,6 +145,9 @@ export const addingTrainee = async (data) => {
 }
 
 export const uploadFile = async (file,id,category) =>{
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     const formData = new FormData();
     formData.append("file", file);
     formData.append("traineeId", id);
@@ -142,6 +170,8 @@ export const uploadFile = async (file,id,category) =>{
 }
 
 export const getUserForRole = async (id) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
     let res = await axios({
         method: 'GET',
         url: baseUrl + `/user/${id}`,
@@ -153,7 +183,24 @@ export const getUserForRole = async (id) => {
     return res
 }
 
+
+export const deleteSupervisor = async (username,id) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+    let res = await axios({
+        method: 'DELETE',
+        url: baseUrl + `/supervisor/${username}/${id}`,
+        auth: {
+            username: userName,
+            password: password
+        }
+    })
+    return res
+}
+
 export const deleteUser = async (id) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
     let res = await axios({
         method: 'DELETE',
         url: baseUrl + `/user/${id}`,
@@ -166,6 +213,9 @@ export const deleteUser = async (id) => {
 }
 
 export const deleteTrainee = async (id) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'DELETE',
         url: baseUrl + `/trainee/${id}`,
@@ -179,6 +229,9 @@ export const deleteTrainee = async (id) => {
 
 
 export const addingUser = async (data) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'POST',
         url: baseUrl + `/create/${role}`,
@@ -192,6 +245,9 @@ export const addingUser = async (data) => {
 }
 
 export const getSupervisorOfUser = async (data) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'get',
         url: baseUrl + "/me/supervisor",
@@ -205,6 +261,9 @@ export const getSupervisorOfUser = async (data) => {
 }
 
 export const updateTraineeCount = async (id,count) => {
+    const userName=localStorageService.getItem("username");
+const password=localStorageService.getItem("password");
+const role=localStorageService.getItem("role");
     let res = await axios({
         method: 'put',
         url: baseUrl + `/supervisor/${count}/${id}`,

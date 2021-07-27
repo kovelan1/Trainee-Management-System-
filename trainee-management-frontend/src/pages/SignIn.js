@@ -95,9 +95,9 @@ export default function SignIn(props) {
               username: Yup.string().max(255).required('User Name is required'),
               password: Yup.string().max(255).required('Password is required')
             })}
-             onSubmit={ async values => { // url/me end point return the user details, once receive the user details stored it in localstorage, redirect the respetive page according to role 
+            asnyc onSubmit={ async values => { // url/me end point return the user details, once receive the user details stored it in localstorage, redirect the respetive page according to role 
               // var promise = new Promise
-               getAuthonticated(values.username,values.password).then(data=>{
+               await getAuthonticated(values.username,values.password).then(data=>{
                 
                   localStorageService.setItem("user", data.data);
                   localStorageService.setItem("role", data.data.role);

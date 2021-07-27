@@ -1,8 +1,11 @@
 package com.tms.controller;
 
+import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.mail.MessagingException;
 
 import org.hibernate.result.UpdateCountOutput;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -112,7 +115,7 @@ public class HomeController {
 	
 	@GetMapping("/user/ROLE_admin")
 	public List<User> getUserForAdmin() {
-    	return userService.getAllUserByRole("ROLE_hr");
+    	return userService.getAllSuggestedBy();
     }
 	
 	@GetMapping("/user/ROLE_hr")
@@ -135,12 +138,15 @@ public class HomeController {
 	
 	
 	@PostMapping("/trainee")
-//	@PreAuthorize("hasRole('ROLE_secretary')")
+	@PreAuthorize("hasAnyRole('ROLE_admin','ROLE_secretary')")
 	public ResponseEntity<?> createTrainee(@RequestBody Trainee trainee) {
-		return traineeService.createTrainee(trainee);
+	
+			return traineeService.createTrainee(trainee);
+		
 	}
 	
 	@PostMapping("/uploadFile")
+	@PreAuthorize("hasAnyRole('ROLE_admin','ROLE_secretary')")
     public void uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("traineeId") long traineeId,@RequestParam("category") String category) throws UserNotFoundException {
          traineeService.storeFile(file,traineeId,category);
 
@@ -159,20 +165,21 @@ public class HomeController {
     
     //update trainee status by HR
     @PutMapping("/trainee/ROLE_hr/{id}")
-//	@PreAuthorize("hasRole('ROLE_hr')")
+	@PreAuthorize("hasRole('ROLE_hr')")
     public Trainee updateHrValidate(@PathVariable(value = "id") long id) throws UserNotFoundException {
     	return traineeService.hrValidate(id);
     }
     
   //update trainee status by HR
-    @PutMapping("/trainee/ROLE_director/{id}")
-//	@PreAuthorize("hasRole('ROLE_director')")
+    @PutMapping("/trainee/ROLE_admin/{id}")
+	@PreAuthorize("hasRole('ROLE_admin')")
     public Trainee updateConfirmation (@PathVariable(value = "id") long id) throws UserNotFoundException {
     	return traineeService.confirmation(id);
     }
     
     
     @DeleteMapping("/trainee/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_admin','ROLE_secretary')")
     public void deletTrainee(@PathVariable(value = "id") long id) throws UserNotFoundException {
     	 traineeService.archiveTrainee(id);
     }
@@ -182,6 +189,19 @@ public class HomeController {
     public Iterable<Trainee> findAllDelete(@RequestParam(value = "isDeleted", required = false, defaultValue = "false") boolean isDeleted) {
         return traineeService.findAllDelete(isDeleted);
     }
+    
+    @DeleteMapping("/supervisor/{username}/{id}")
+    @PreAuthorize("hasAnyRole('ROLE_admin','ROLE_hr')")
+    public void deletsupervisor(@PathVariable(value = "username") String username, @PathVariable(value = "id") long id) throws UserNotFoundException {
+    	 userService.deleteSupervisor(username,id);
+    }
+    
+    @DeleteMapping("/user/{username}")
+    @PreAuthorize("hasAnyRole('ROLE_admin','ROLE_hr')")
+    public void deletUser(@PathVariable(value = "username") String username) throws UserNotFoundException {
+    	 userService.deleteUser(username);
+    }
+    
     
 //	@GetMapping("/trainee")
 //	@PreAuthorize("hasRole('ROLE_trainee')")
