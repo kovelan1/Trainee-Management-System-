@@ -87,7 +87,7 @@ const useStyles = makeStyles((theme) => ({
             level: "",
             periodOfInternship: "",
             durationOfInternship: "",
-            employeeName: null,
+            paid: null,
             supervisor: {
                 id: 1,
                 user: {
@@ -445,7 +445,7 @@ function modelConteant(trainee){
                    <th >Duration Of Internship</th><th> : </th><th>{trainee.durationOfInternship}</th>
                </tr>
                <tr>
-                   <th >Employee Name</th><th> : </th><th>{trainee.employeeName}</th>
+                   <th >Paid</th><th> : </th><th>{trainee.paid ? "Yes" : "No"}</th>
                </tr>
                <tr>
                    <th >Supervisor</th><th> : </th><th>{trainee.supervisor.user.firstName} {trainee.supervisor.user.lastName}</th>

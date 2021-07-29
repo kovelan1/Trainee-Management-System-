@@ -92,14 +92,14 @@ public class TraineeService {
 		Trainee createdTrainee =traineeRepository.save(trainee);
 		
 		
-		try {
-			sendEmail(trainee.getFirstname() +" "+trainee.getLastname(), trainee.getSupervisor().getUser().getUsername());
-		} catch (MessagingException e) {
-			return new ResponseEntity<String> ("Error occoured while sending the email",HttpStatus.BAD_REQUEST);
-			
-		} catch (IOException e) {
-			return new ResponseEntity<String> ("Error occoured while sending the email",HttpStatus.BAD_REQUEST);
-		}
+//		try {
+//			sendEmail(trainee.getFirstname() +" "+trainee.getLastname(), trainee.getSupervisor().getUser().getUsername());
+//		} catch (MessagingException e) {
+//			return new ResponseEntity<String> ("Error occoured while sending the email",HttpStatus.BAD_REQUEST);
+//			
+//		} catch (IOException e) {
+//			return new ResponseEntity<String> ("Error occoured while sending the email",HttpStatus.BAD_REQUEST);
+//		}
 		
 		return new ResponseEntity<Trainee>(trainee,HttpStatus.OK);
 	}

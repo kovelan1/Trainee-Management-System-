@@ -43,7 +43,7 @@ public class Trainee {
 	private String level;
 	private String periodOfInternship;
 	private String durationOfInternship;
-	private String employeeName;
+	private boolean paid;
 	
 	@ManyToOne
     @JoinColumn(name = "supervisor")
@@ -237,13 +237,6 @@ public class Trainee {
 		this.directorConfirmed = directorConfirmed;
 	}
 	
-	public String getEmployeeName() {
-		return employeeName;
-	}
-
-	public void setEmployeeName(String employeeName) {
-		this.employeeName = employeeName;
-	}
 
 	public boolean isDeleted() {
 		return deleted;
@@ -251,6 +244,20 @@ public class Trainee {
 
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
+	}
+
+
+
+
+	public boolean isPaid() {
+		return paid;
+	}
+
+
+
+
+	public void setPaid(boolean paid) {
+		this.paid = paid;
 	}
 	
 	

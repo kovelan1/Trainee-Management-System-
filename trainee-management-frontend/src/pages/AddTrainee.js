@@ -117,6 +117,7 @@ export default function AddTrainee(props) {
                firstname: props.edit ? location.state.data.firstname : '',
                lastname: props.edit ? location.state.data.lastname :'',
                cin: props.edit ? location.state.data.cin : '',
+               paid: props.edit ? location.state.data.paid:'',
                address:{
                    homeNumber: props.edit ? location.state.data.address.homeNumber :'',
                    address: props.edit ? location.state.data.address.address :'',
@@ -130,7 +131,7 @@ export default function AddTrainee(props) {
                specialty:props.edit ? location.state.data.specialty : '',
                mobile: props.edit ? location.state.data.mobile : '',
                level: props.edit ? location.state.data.level : '',
-               employeeName: props.edit ? location.state.data.employeeName : '',
+            //    employeeName: props.edit ? location.state.data.employeeName : '',
                personal:  props.edit ? location.state.data.personal : '',
                phone: props.edit ? location.state.data.phone : '',
                periodOfInternship: props.periodOfInternship ? location.state.data.periodOfInternship : '',
@@ -159,9 +160,9 @@ export default function AddTrainee(props) {
                    specialty:Yup.string().max(255).required('Specialty is required'),
                    level:Yup.string().max(255).required('Level is required'),
                    phone:Yup.string().matches(phoneRegExp, 'Mobile number is not valid').min(9).required('Mobile number is required'),
-                   employeeName: Yup.string().max(255).required('Employee Name is required'),
                    periodOfInternship: Yup.string().max(255).required('Period is required'),
                    durationOfInternship: Yup.string().max(255).required('Duration is required'),
+                   paid:Yup.string().max(255).required('Paid is required'),
                    
                })
             
@@ -471,20 +472,30 @@ export default function AddTrainee(props) {
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField
-                                error={Boolean(touched.employeeName && errors.employeeName)}
-                                helperText={touched.employeeName && errors.employeeName}
+                            <FormControl fullWidth variant="outlined" style={{marginTop:'15px'}}>
+                            <InputLabel htmlFor="outlined-age-native-simple">Paid</InputLabel>
+                                <Select
                                 fullWidth
-                                label="Employee Name "
+                                native
+                                error={Boolean(touched.paid && errors.paid)}
+                                helperText={touched.paid && errors.paid}
                                 margin="normal"
-                                name="employeeName"
+                                variant="outlined"
                                 onBlur={handleBlur}
                                 onChange={handleChange}
-                                type="text"
-                                value={values.employeeName}
-                                variant="outlined"
+                                label="Paid"
+                                name="paid"
+                                inputProps={{
+                                    
+                                    id: 'outlined-age-native-simple',
+                                }}
                                 required
-                            />
+                                >
+                                <option aria-label="Supervisor" value="" />
+                                <option value={true}>Yes</option>
+                                <option value={false}>No</option>
+                            </Select>
+                            </FormControl>
                         </Grid>
                     </Grid>
                     <Grid container spacing={3}>
