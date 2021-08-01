@@ -131,10 +131,10 @@ public class HomeController {
 		return traineeService.getBySupervisor(username);
 	}
 	
-	@GetMapping("/sugessions/{username}")
-	public List<Trainee> getTraineesBySugession(@PathVariable(value = "username") String username) throws UserNotFoundException{
-		return traineeService.getBySugession(username);
-	}
+//	@GetMapping("/sugessions/{username}")
+//	public List<Trainee> getTraineesBySugession(@PathVariable(value = "username") String username) throws UserNotFoundException{
+//		return traineeService.getBySugession(username);
+//	}
 	
 	
 	@PostMapping("/trainee")

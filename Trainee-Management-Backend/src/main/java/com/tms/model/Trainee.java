@@ -45,14 +45,13 @@ public class Trainee {
 	private String durationOfInternship;
 	private boolean paid;
 	
+	private String employeeName;
+	
 	@ManyToOne
     @JoinColumn(name = "supervisor")
 	private Supervisor supervisor;
 	
 	
-	@ManyToOne
-    @JoinColumn(name = "suggestedBy")
-	private User suggestedBy;
 	
 	@OneToMany(mappedBy = "trainee")
 	private List<DBFile> files;
@@ -86,7 +85,6 @@ public class Trainee {
 		this.periodOfInternship = periodOfInternship;
 		this.durationOfInternship = durationOfInternship;
 		this.supervisor = supervisor;
-		this.suggestedBy = suggestedBy;
 		
 	}
 
@@ -205,13 +203,6 @@ public class Trainee {
 		this.supervisor = supervisor;
 	}
 
-	public User getSuggestedBy() {
-		return suggestedBy;
-	}
-
-	public void setSuggestedBy(User suggestedBy) {
-		this.suggestedBy = suggestedBy;
-	}
 
 	public List<DBFile> getFiles() {
 		return files;
@@ -258,6 +249,20 @@ public class Trainee {
 
 	public void setPaid(boolean paid) {
 		this.paid = paid;
+	}
+
+
+
+
+	public String getEmployeeName() {
+		return employeeName;
+	}
+
+
+
+
+	public void setEmployeeName(String employeeName) {
+		this.employeeName = employeeName;
 	}
 	
 	

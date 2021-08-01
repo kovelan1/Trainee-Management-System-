@@ -87,6 +87,7 @@ const useStyles = makeStyles((theme) => ({
             level: "",
             periodOfInternship: "",
             durationOfInternship: "",
+            employeeName:"",
             paid: null,
             supervisor: {
                 id: 1,
@@ -451,7 +452,7 @@ function modelConteant(trainee){
                    <th >Supervisor</th><th> : </th><th>{trainee.supervisor.user.firstName} {trainee.supervisor.user.lastName}</th>
                </tr>
                <tr>
-                   <th >SuggestedBy</th><th> : </th><th>{trainee.suggestedBy.firstName} {trainee.suggestedBy.lastName}</th>
+                   <th >Employee name</th><th> : </th><th>{trainee.employeeName}</th>
                </tr>
                <tr>
                    <th >HR Validated</th><th> : </th><th>{trainee.hrValidated ? "Yes" : "No"}</th>

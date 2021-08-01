@@ -36,8 +36,6 @@ export default function AddTrainee(props) {
     const[loading, setLoading]=React.useState(false);
     const[alertMessage, setAlertMessage]=React.useState('');
     const[supervisorList, setSupervisorList]=React.useState('');
-    const[userList, setUserList]=React.useState('');
-    const[suggestedBySel, setSuggestedBy]=React.useState('');
     const[supervisorSel, setSupervisor]=React.useState('');
     const[files, setFiles]=React.useState([{
         id: null,
@@ -52,13 +50,11 @@ export default function AddTrainee(props) {
             setSupervisorList(data.data)
           }).catch()
 
-          await getSuggestedBy().then(data=>{
-            setUserList(data.data)
-          }).catch()
+         
 
           if(props.edit){
             setSupervisor(location.state.data.supervisor);
-            setSuggestedBy(location.state.data.suggestedBy);
+            
           }
           
         }
@@ -79,12 +75,7 @@ export default function AddTrainee(props) {
           setSupervisor(supervisorList[e.target.value]);
           console.log(supervisorSel);
       }
-      const selectSugestHandler=(e)=>{
-        console.log(e.target.value);
-
-        setSuggestedBy(userList[e.target.value]);
-        console.log(suggestedBySel);
-    }
+      
 
       const handleCategoryValueChange = (index,type, e) => {
         const item = [...files];
@@ -131,7 +122,7 @@ export default function AddTrainee(props) {
                specialty:props.edit ? location.state.data.specialty : '',
                mobile: props.edit ? location.state.data.mobile : '',
                level: props.edit ? location.state.data.level : '',
-            //    employeeName: props.edit ? location.state.data.employeeName : '',
+               employeeName: props.edit ? location.state.data.employeeName : '',
                personal:  props.edit ? location.state.data.personal : '',
                phone: props.edit ? location.state.data.phone : '',
                periodOfInternship: props.periodOfInternship ? location.state.data.periodOfInternship : '',
@@ -163,7 +154,7 @@ export default function AddTrainee(props) {
                    periodOfInternship: Yup.string().max(255).required('Period is required'),
                    durationOfInternship: Yup.string().max(255).required('Duration is required'),
                    paid:Yup.string().max(255).required('Paid is required'),
-                   
+                   employeeName:Yup.string().max(255).required('Employee Name is required'),
                })
             
 
@@ -172,8 +163,7 @@ export default function AddTrainee(props) {
                
                onSubmit={async values => {
                    const supervisor=supervisorSel;
-                   const suggestedBy=suggestedBySel;
-                const valuesToSend = { ...values, supervisor,suggestedBy}
+                const valuesToSend = { ...values, supervisor}
                         setLoading(true);
                        await addingTrainee(valuesToSend).then(data=>{
                            // console.log(data.data)
@@ -535,7 +525,7 @@ export default function AddTrainee(props) {
                     {props.edit ? '': <div>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth variant="outlined" >
+                        <FormControl fullWidth variant="outlined" style={{marginTop:'15px'}}>
                         <InputLabel htmlFor="outlined-age-native-simple">Supervisor</InputLabel>
                             <Select
                             fullWidth
@@ -563,7 +553,21 @@ export default function AddTrainee(props) {
                             </FormControl>
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth variant="outlined" >
+                            <TextField
+                                error={Boolean(touched.employeeName && errors.employeeName)}
+                                helperText={touched.employeeName && errors.employeeName}
+                                fullWidth
+                                label="Employee Name"
+                                margin="normal"
+                                name="employeeName"
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                type="text"
+                                value={values.employeeName}
+                                variant="outlined"
+                                required
+                            />
+                            {/* <FormControl fullWidth variant="outlined" >
                                 <InputLabel htmlFor="outlined-age-native-simple">Suggested By</InputLabel>
                                     <Select
                                     fullWidth
@@ -584,7 +588,7 @@ export default function AddTrainee(props) {
                                     
                                     required
                                     >
-                                        {/* selected="selected" */}
+                                    
                                   <option aria-label="suggestedBy" value="" />
                                     {userList && userList.map((user,index)=>
                                         
@@ -593,7 +597,7 @@ export default function AddTrainee(props) {
                                         
                                     )}
                                 </Select>
-                            </FormControl>
+                            </FormControl> */}
                         </Grid>
                     </Grid>
                     { files && files.map((count,index)=>

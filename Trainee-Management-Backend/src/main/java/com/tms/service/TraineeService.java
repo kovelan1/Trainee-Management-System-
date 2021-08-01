@@ -76,10 +76,10 @@ public class TraineeService {
 		return supervisor.getTrinees();
 	}
 
-	public List<Trainee> getBySugession(String username) throws UserNotFoundException {
-		User sugesster=userRepository.findById(username).orElseThrow(()-> new UserNotFoundException("supervisor Not available"));
-		return sugesster.getSuggested();
-	}
+//	public List<Trainee> getBySugession(String username) throws UserNotFoundException {
+//		User sugesster=userRepository.findById(username).orElseThrow(()-> new UserNotFoundException("supervisor Not available"));
+//		return sugesster.getSuggested();
+//	}
 
 	@Transactional
 	public ResponseEntity<?> createTrainee(Trainee trainee){

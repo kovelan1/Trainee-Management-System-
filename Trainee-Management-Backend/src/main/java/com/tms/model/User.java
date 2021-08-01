@@ -57,9 +57,7 @@ public class User {
 //    @OneToMany(mappedBy = "supervisor")
 //    private List<Trainee> trinees;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "suggestedBy")
-    private List<Trainee> suggested;
+ 
     
     public User() {}
 
@@ -148,16 +146,6 @@ public class User {
 		this.supervisor = supervisor;
 	}
 
-
-	public List<Trainee> getSuggested() {
-		return suggested;
-	}
-
-
-
-	public void setSuggested(List<Trainee> suggested) {
-		this.suggested = suggested;
-	}
 
 	public String getPassword() {
 		return password;
